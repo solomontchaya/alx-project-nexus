@@ -1,4 +1,4 @@
-# 🎓 **Project Nexus – Student Project Voting Platform Documentation**
+# **Project Nexus – Student Project Voting Platform Documentation**
 
 This repository documents my backend engineering journey through the **ProDev Backend Engineering Program**, using a practical real-world project:
 a **Student Project Voting Platform**.
@@ -7,30 +7,14 @@ The platform allows **student teams** to submit projects and **individual users*
 
 ---
 
-# 🧩 **Table of Contents**
-
-1. [About the Program](#about-the-program)
-2. [Project Overview](#project-overview)
-3. [Technologies Used](#technologies-used)
-4. [Backend Concepts Applied](#backend-concepts-applied)
-5. [System Architecture](#system-architecture)
-6. [Database Design](#database-design)
-7. [API Endpoints Overview](#api-endpoints-overview)
-8. [Challenges & Solutions](#challenges--solutions)
-9. [Best Practices Followed](#best-practices-followed)
-10. [Personal Takeaways](#personal-takeaways)
-11. [Collaboration Notes](#collaboration-notes)
-
----
-
-# 📚 **About the Program**
+# **About the Program**
 
 The **ProDev Backend Engineering Program** is designed to build strong foundations in backend development, covering APIs, databases, authentication, DevOps, and modern engineering tools.
 This repository serves as my documentation hub, summarizing all the key learnings applied in building a real backend system.
 
 ---
 
-# 🚀 **Project Overview – Student Project Voting Platform**
+# **Project Overview – Student Project Voting Platform**
 
 This platform enables:
 
@@ -39,14 +23,14 @@ This platform enables:
 * Register and create team profiles
 * Submit their project (title, description, media, etc.)
 
-### 🧑‍🎓 **Students/Users to:**
+### **Students/Users to:**
 
 * Sign up with email & password
 * Log in to access the voting interface
 * View all projects
 * Cast **one vote per project**
 
-### 📊 **Voting Rules:**
+### **Voting Rules:**
 
 * A user can vote for multiple *different* projects
 * But cannot vote for the **same project twice**
@@ -56,7 +40,7 @@ This project demonstrates core backend engineering skills such as user authentic
 
 ---
 
-# 🛠️ **Technologies Used**
+# **Technologies Used**
 
 ### **Languages & Frameworks**
 
@@ -78,7 +62,7 @@ This project demonstrates core backend engineering skills such as user authentic
 
 ---
 
-# 🧠 **Backend Concepts Applied**
+# **Backend Concepts Applied**
 
 ### **1. User Authentication**
 
@@ -124,7 +108,7 @@ This project demonstrates core backend engineering skills such as user authentic
 
 ---
 
-# 🏗️ **System Architecture**
+# **System Architecture**
 
 ### **Backend Architecture Summary**
 
@@ -138,7 +122,7 @@ A simple and clean backend architecture suitable for a student voting system.
 
 ---
 
-# 🗄️ **Database Design**
+# **Database Design**
 
 ### **Entities**
 
@@ -213,7 +197,7 @@ GET  /projects/<id>/votes/
 
 ---
 
-# 🚧 **Challenges & Solutions**
+# **Challenges & Solutions**
 
 ### **1. Preventing Double Voting**
 
@@ -248,7 +232,7 @@ GET  /projects/<id>/votes/
 
 ---
 
-# 🌟 **Best Practices Followed**
+# **Best Practices Followed**
 
 * Clean and modular Django project structure
 * Consistent use of environment variables
@@ -261,7 +245,7 @@ GET  /projects/<id>/votes/
 
 ---
 
-# 💡 **Personal Takeaways**
+# **Personal Takeaways**
 
 * API development is easier with a clean database design
 * Permissions and authentication are central to any real application
@@ -272,7 +256,7 @@ GET  /projects/<id>/votes/
 
 ---
 
-# 🤝 **Collaboration Notes**
+# **Collaboration Notes**
 
 You should collaborate with:
 
@@ -294,7 +278,7 @@ Share progress, ask questions, and coordinate teams.
 
 ---
 
-# 📦 **Repository Structure**
+# **Repository Structure**
 
 ```
 alx-project-nexus/
