@@ -1,0 +1,77 @@
+{% load static %}
+<!-- Combined Header: Top Bar + Navigation (Bootstrap 5) -->
+<header class="w-100 shadow-sm">
+    <div class="">
+        <!-- Top Bar: Logo, Notifications, Profile -->
+        <div class="container d-flex justify-content-between align-items-center px-3 py-2 bg-white border-bottom">
+            <!-- Left: Logo -->
+            <div class="d-flex align-items-center">
+            <a href="">
+                <img src="{% static 'files/assets/img/logo/logo-3.png' %}" alt="AppLaud Logo" class="mx-2" style="height:32px; width:32px;">
+            </a>
+            <h1 class="h5 mb-0">AppLaud</h1>
+            </div>
+
+            <!-- Right: Notifications & Profile -->
+            <div class="d-flex align-items-center">
+            <!-- Notifications -->
+            <button type="button" class="btn position-relative mx-2">
+                <i class="fas fa-bell fs-5 text-dark"></i>
+                <!-- Red dot for new notifications -->
+                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+            </button>
+
+            <!-- Profile -->
+            <div class="dropdown">
+                <a href="#" class="d-block" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{% static 'files/assets/img/avatar-1.png' %}" class="rounded-circle border" style="height:32px; width:32px;" alt="Profile">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="">My Projects</a></li>
+                <li><a class="dropdown-item" href="">Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="">Logout</a></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <!-- Second Line: Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-top">
+            <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-4">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'leaderboard' %}active{% endif %}" href="">Leaderboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}" href="">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'teams' %}active{% endif %}" href="">Teams</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" href="">Vote</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" href="">My Votes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'submit_project' %}active{% endif %}" href="">Submit Project</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'results' %}active{% endif %}" href="">Results</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="">About / Rules</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </div>
+</header>
