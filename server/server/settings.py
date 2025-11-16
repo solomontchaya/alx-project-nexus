@@ -14,6 +14,17 @@ SECRET_KEY = 'django-insecure-99*a%qx_q#)3bziun=)++q+0vs^er9z)=v(oh_mvk&uows(@at
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+FRONTEND_URL = 'https://your-frontend.vercel.app'
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-app-password'  # Use App Password
+DEFAULT_FROM_EMAIL = 'Student Voting <noreply@yourdomain.com>'
+
 ALLOWED_HOSTS = []
 
 # Authentication Configuration

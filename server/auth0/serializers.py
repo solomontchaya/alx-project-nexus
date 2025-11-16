@@ -1,25 +1,34 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
 
-User = get_user_model()
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'  # Tell SimpleJWT to use email
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
+    def validate(self, attrs):
+        # Replace 'email' with 'username' internally
+        email = attrs.get("email")
+        password = attrs.get("password")
 
-    class Meta:
-        model = User
-        fields = ['email', 'first_name', 'last_name', 'password']
+        if email and password:
+            user = authenticate(request=self.context.get('request'),
+                                username=email, password=password)
+            if not user:
+                raise serializers.ValidationError(
+                    "No active account found with the given credentials",
+                    code='authorization'
+                )
+            if not user.is_active:
+                raise serializers.ValidationError(
+                    "Account is disabled.",
+                    code='authorization'
+                )
+        else:
+            raise serializers.ValidationError(
+                "Must include 'email' and 'password'.",
+                code='authorization'
+            )
 
-    def validate_email(self, value):
-        if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError("A user with this email already exists.")
-        return value.lower()
-
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            email=validated_data['email'],
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', ''),
-            password=validated_data['password']
-        )
-        return user
+        # This calls the parent to generate tokens
+        data = super().validate(attrs)
+        return data

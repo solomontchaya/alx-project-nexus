@@ -6,10 +6,10 @@ urlpatterns = [
     path('', include('web.urls')),
     path('admin/', admin.site.urls),
     path('api/auth/', include('auth0.urls')),
-    path('api/votes/', include('votes.urls')),
-    path('api/users/', include('users.urls')),
-    path('api/projects/', include('projects.urls')),
-    path('api/categories/', include('categories.urls')),
+    path('api/', include('votes.urls')),
+    path('api/', include('users.urls')),
+    path('api/', include('projects.urls')),
+    path('api/', include('categories.urls')),
 
     # === OPENAPI SCHEMA ===
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
