@@ -44,22 +44,128 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav gap-4">
+                <ul class="navbar-nav gap-5">
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'leaderboard' %}active{% endif %}" href="">Leaderboard</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}" href="">Projects</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
+                        href="#" 
+                        id="votesDropdown" 
+                        role="button" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false"
+                    >
+                        Campaigns
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="votesDropdown">
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
+                        href="">
+                            All Campaigns
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
+                        href="">
+                            My Campaigns
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
+                        href="">
+                            Create a Campaign
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'teams' %}active{% endif %}" href="">Teams</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
+                        href="#" 
+                        id="votesDropdown" 
+                        role="button" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false"
+                    >
+                        Projects
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="votesDropdown">
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
+                        href="">
+                            All Projects
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
+                        href="">
+                            My Projects
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
+                        href="">
+                            Submit a Project
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" href="">Vote</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
+                        href="#" 
+                        id="votesDropdown" 
+                        role="button" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false"
+                    >
+                        Teams
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="votesDropdown">
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
+                        href="">
+                            All Teams
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
+                        href="">
+                            My Teams
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
+                        href="">
+                            Create a Team
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" href="">My Votes</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
+                        href="#" 
+                        id="votesDropdown" 
+                        role="button" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false"
+                    >
+                        Votes
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="votesDropdown">
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
+                        href="">
+                            Vote
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
+                        href="">
+                            All Votes
+                        </a>
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
+                        href="">
+                            My Votes
+                        </a>
+                    </div>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'submit_project' %}active{% endif %}" href="">Submit Project</a>
                 </li>

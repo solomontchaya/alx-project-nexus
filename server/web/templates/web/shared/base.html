@@ -123,6 +123,7 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{% static 'files/dist/js/demo.js' %}"></script>
     <script>
+        /**
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/static/serviceworker.js')
             .then(function(registration) {
@@ -131,60 +132,9 @@
                 console.log('Service Worker registration failed:', error);
             });
         }
+        **/
     </script>
-    <script>
-        (function () {
-            var dz = document.getElementById('attachmentFileDropzone');
-            var input = document.getElementById('attachmentFile');
-            var filename = document.getElementById('attachmentFilename');
-            var message = dz.querySelector('.dz-message');
-
-            function highlight(on) {
-            dz.style.borderColor = on ? '#007bff' : '#d3d3d3';
-            dz.style.backgroundColor = on ? '#f0f8ff' : '#f9f9f9';
-            }
-
-            function updateFilename() {
-            if (!input.files || !input.files[0]) return;
-            message.style.display = 'none';
-            filename.textContent = input.files[0].name;
-            filename.style.display = 'block';
-            }
-
-            dz.addEventListener('click', function () { input.click(); });
-            dz.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                input.click();
-            }
-            });
-
-            ['dragenter', 'dragover'].forEach(function (evt) {
-            dz.addEventListener(evt, function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                highlight(true);
-            });
-            });
-
-            ['dragleave', 'drop'].forEach(function (evt) {
-            dz.addEventListener(evt, function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                highlight(false);
-            });
-            });
-
-            dz.addEventListener('drop', function (e) {
-            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
-                input.files = e.dataTransfer.files;
-                updateFilename();
-            }
-            });
-
-            input.addEventListener('change', updateFilename);
-        })();
-    </script>
+    
     <script>
         /**
         $(document).ready(function () {
