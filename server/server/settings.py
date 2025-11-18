@@ -25,7 +25,7 @@ EMAIL_HOST_USER = 'your-email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your-app-password'  # Use App Password
 DEFAULT_FROM_EMAIL = 'Student Voting <noreply@yourdomain.com>'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Authentication Configuration
 AUTH_USER_MODEL = 'users.User'
