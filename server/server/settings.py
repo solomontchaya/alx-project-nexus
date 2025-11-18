@@ -30,7 +30,8 @@ DEFAULT_FROM_EMAIL = 'Student Voting <noreply@yourdomain.com>'
 ALLOWED_HOSTS = [
     "127.0.0.1"
     "localhost", 
-    ".vercel.app"
+    ".vercel.app",
+    ".pythonanywhere.com"
 ]
 
 # Authentication Configuration
