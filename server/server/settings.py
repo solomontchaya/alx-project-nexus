@@ -116,11 +116,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-""""
-DATABASES = {
-    "default": dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
-}
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -199,9 +195,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
