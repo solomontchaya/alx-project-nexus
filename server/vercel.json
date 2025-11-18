@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
+    }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "dest": "/staticfiles/$1" },
+    { "src": "/(.*)", "dest": "server/wsgi.py" }
+  ],
+  "buildCommand": "python manage.py collectstatic --no-input && python manage.py migrate",
+  "outputDirectory": "staticfiles"
+}
