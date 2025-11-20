@@ -1,10 +1,22 @@
 import os
+import socket
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
 # Load .env file
 load_dotenv()
+
+def get_ipv4_host(hostname):
+    """Resolve hostname to IPv4 address"""
+    try:
+        # Get only IPv4 addresses
+        info = socket.getaddrinfo(hostname, 5432, socket.AF_INET)
+        if info:
+            return info[0][4][0]  # Return first IPv4 address
+    except:
+        pass
+    return hostname  # Fallback to original hostname
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -120,6 +132,8 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+DB_HOST = os.getenv('DB_HOST')
+DB_HOST_IPV4 = get_ipv4_host(DB_HOST)
 
 DATABASES = {
     'default': {
@@ -127,15 +141,16 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
+        'HOST': DB_HOST_IPV4,  # Use resolved IPv4 address
         'PORT': os.getenv('DB_PORT'),
-
         'OPTIONS': {
             'sslmode': 'require',
+            'connect_timeout': 10,
         },
-        'CONN_HEALTH_CHECKS': False,
     }
 }
+
+print(f"Using host: {DB_HOST} -> {DB_HOST_IPV4}")
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
