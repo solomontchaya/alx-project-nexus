@@ -8,7 +8,6 @@ from projects.models import Project
 class Vote(models.Model):
     ref = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
-    category = models.ForeignKey('categories.Category', on_delete=models.CASCADE)
     project_campaign = models.ForeignKey('projects.ProjectCampaign', on_delete=models.CASCADE, related_name='votes')
 
     is_overall = models.BooleanField(default=False)
@@ -18,13 +17,6 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ('voter', 'project_campaign')
-        constraints = [
-            models.UniqueConstraint(
-                fields=['voter', 'project_campaign'],
-                condition=models.Q(is_overall=True),
-                name='one_overall_vote_per_entry'
-            )
-        ]
         verbose_name = "Vote"
         verbose_name_plural = "Votes"
 
@@ -36,11 +28,11 @@ class Vote(models.Model):
 
         # Category vote: one per category
         else:
-            if not self.project.category:
+            if not self.project_campaign.category:
                 raise ValidationError("Project must belong to a category for a category vote.")
             if Vote.objects.filter(
                 voter=self.voter,
-                project__category=self.project.category,
+                project__category=self.project_campaign.category,
                 is_overall=False
             ).exclude(pk=self.pk).exists():
                 raise ValidationError(
