@@ -1,4 +1,3 @@
-# projects/views.py
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -12,11 +11,11 @@ from .serializers import ProjectSerializer
 
 @extend_schema(tags=['Projects'])
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.select_related('team', 'campaign', 'category').all()
     serializer_class = ProjectSerializer
     lookup_field = 'ref'  # Use UUID ref for URLs
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['category__id', 'team__id']
+    filterset_fields = ['campaign__id', 'category__id', 'team__id']
     search_fields = ['title', 'summary', 'description']
     ordering_fields = ['title', 'created_at', 'total_votes']
 

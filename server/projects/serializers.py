@@ -1,36 +1,35 @@
 from rest_framework import serializers
 from .models import Project
-from categories.serializers import Category, CategorySerializer
 from teams.serializers import TeamSerializer
+from campaigns.serializers import Campaign, CampaignSerializer
+from categories.serializers import Category, CategorySerializer
 
 class ProjectSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-    category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(), source='category', write_only=True
-    )
     team = TeamSerializer(read_only=True)
-    total_votes = serializers.IntegerField(read_only=True)
-    overall_votes = serializers.IntegerField(read_only=True)
-    category_votes = serializers.IntegerField(read_only=True)
+    campaign = CampaignSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+
+    campaign_ref = serializers.UUIDField(write_only=True, required=False, allow_null=True)
+    category_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Project
         fields = [
-            'id', 'ref', 'team', 'category', 'category_id',
-            'name', 'summary', 'description', 'image',
-            'created_at', 'updated_at',
-            'total_votes', 'overall_votes', 'category_votes'
+            'ref', 'name', 'summary', 'description', 'image',
+            'team', 'campaign', 'category',
+            'campaign_ref', 'category_id',
+            'total_votes', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['ref', 'team', 'created_at', 'updated_at', 'total_votes', 'overall_votes', 'category_votes']
+        read_only_fields = ['ref', 'total_votes', 'created_at', 'updated_at']
 
-    def validate(self, attrs):
-        request = self.context.get('request')
-        if request and request.method == 'POST':
-            team = request.user.team_member.team  # Assuming user has one team; adjust as needed
-            if Project.objects.filter(team=team).exists():
-                raise serializers.ValidationError("Your team already has a project.")
-            attrs['team'] = team
-        return attrs
+    def create(self, validated_data):
+        campaign_ref = validated_data.pop('campaign_ref', None)
+        category_id = validated_data.pop('category_id', None)
 
-    def validate_name(self, value):
-        return value.strip().name()
+        project = Project.objects.create(
+            team=validated_data['request'].user.team_member.team,
+            campaign_id=Campaign.objects.get(ref=campaign_ref).id if campaign_ref else None,
+            category_id=category_id,
+            **validated_data
+        )
+        return project

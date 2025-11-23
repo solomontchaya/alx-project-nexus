@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/', include('votes.urls')),
     path('api/', include('users.urls')),
     path('api/', include('projects.urls')),
+    path('api/', include('campaigns.urls')),
     path('api/', include('categories.urls')),
 
     # === OPENAPI SCHEMA ===

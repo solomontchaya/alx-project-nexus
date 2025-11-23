@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
 
     'categories',
+    'campaigns',
     'projects',
     'teams',
     'votes',
@@ -132,25 +133,19 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-DB_HOST = os.getenv('DB_HOST')
-DB_HOST_IPV4 = get_ipv4_host(DB_HOST)
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': DB_HOST_IPV4,  # Use resolved IPv4 address
-        'PORT': os.getenv('DB_PORT'),
-        'OPTIONS': {
-            'sslmode': 'require',
-            'connect_timeout': 10,
-        },
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASS'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
 
-print(f"Using host: {DB_HOST} -> {DB_HOST_IPV4}")
+print(f"Using host: {os.getenv('DATABASE_HOST')} -> {os.getenv('DATABASE_NAME')}")
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
