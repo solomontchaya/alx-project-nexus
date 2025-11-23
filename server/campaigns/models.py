@@ -7,7 +7,7 @@ from teams.models import Team
 class Campaign(models.Model):
     ref = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     organizer = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='campaigns')
-    categories = models.ManyToManyField('categories.Category', related_name='campaigns')
+    categories = models.ManyToManyField('categories.Category', null=True, blank=True, related_name='campaigns')
     name = models.CharField(max_length=255)
     flyer = models.ImageField(upload_to='flyers/', blank=True, null=True)
     summary = models.CharField(max_length=500)
