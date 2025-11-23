@@ -8,7 +8,7 @@ from projects.models import Project
 class Vote(models.Model):
     ref = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
-    project_campaign = models.ForeignKey('projects.ProjectCampaign', on_delete=models.CASCADE, related_name='votes')
+    project_campaign = models.ForeignKey('projects.ProjectCampaign', on_delete=models.CASCADE, null=True, related_name='votes')
 
     is_overall = models.BooleanField(default=False)
 
