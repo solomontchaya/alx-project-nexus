@@ -154,7 +154,6 @@ DATABASES = {
     }
 }
 """
-
 print(f"Using host: {os.getenv('DATABASE_HOST')} -> {os.getenv('DATABASE_NAME')}")
 
 REST_FRAMEWORK = {
