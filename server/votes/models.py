@@ -2,13 +2,12 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.db import models
 from users.models import User
-from projects.models import Project
+from projects.models import Project, ProjectCampaign
 
-# Create your models here.
 class Vote(models.Model):
     ref = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
-    project_campaign = models.ForeignKey('projects.ProjectCampaign', on_delete=models.CASCADE, null=True, related_name='votes')
+    project_campaign = models.ForeignKey(ProjectCampaign, on_delete=models.CASCADE, null=True, related_name='votes')
 
     is_overall = models.BooleanField(default=False)
 
@@ -28,15 +27,17 @@ class Vote(models.Model):
 
         # Category vote: one per category
         else:
+            if not self.project_campaign:
+                raise ValidationError("Project campaign is required for category vote.")
             if not self.project_campaign.category:
-                raise ValidationError("Project must belong to a category for a category vote.")
+                raise ValidationError("Project campaign must belong to a category for a category vote.")
             if Vote.objects.filter(
                 voter=self.voter,
-                project__category=self.project_campaign.category,
+                project_campaign__category=self.project_campaign.category,
                 is_overall=False
             ).exclude(pk=self.pk).exists():
                 raise ValidationError(
-                    f"You have already voted in the '{self.project.category.name}' category."
+                    f"You have already voted in the '{self.project_campaign.category.name}' category."
                 )
 
     def save(self, *args, **kwargs):
@@ -45,4 +46,5 @@ class Vote(models.Model):
 
     def __str__(self):
         kind = "Overall" if self.is_overall else "Category"
-        return f"{self.voter.email} → {kind}: {self.project.name}"
+        project_name = self.project_campaign.project.name if self.project_campaign and self.project_campaign.project else "No Project"
+        return f"{self.voter.email} → {kind}: {project_name}"
