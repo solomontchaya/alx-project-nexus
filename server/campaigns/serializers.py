@@ -23,3 +23,25 @@ class CampaignSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You can only create campaigns for your own team.")
         validated_data['organizer'] = team
         return super().create(validated_data)
+    
+class CampaignListSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(read_only=True)
+    is_open = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Campaign
+        fields = ['ref', 'name', 'flyer', 'summary', 'date_from', 'date_to',
+                  'is_active', 'status', 'is_open', 'created_at']
+
+class CampaignDetailSerializer(serializers.ModelSerializer):
+    organizer = serializers.StringRelatedField()
+    status = serializers.CharField(read_only=True)
+    is_open = serializers.BooleanField(read_only=True)
+    project_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Campaign
+        fields = '__all__'
+
+    def get_project_count(self, obj):
+        return obj.participating_projects.count()

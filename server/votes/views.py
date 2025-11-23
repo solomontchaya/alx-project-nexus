@@ -1,57 +1,69 @@
+# votes/views.py
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Case, When, IntegerField
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
-from votes.models import Vote
-from votes.serializers import VoteCreateSerializer, VoteSerializer
+from .models import Vote
+from .serializers import VoteCreateSerializer, VoteSerializer
+
 
 @extend_schema(tags=['Votes'])
 class VoteViewSet(viewsets.ModelViewSet):
-    queryset = Vote.objects.select_related('project', 'voter', 'project__category').all()
-    lookup_field = 'ref'
+    queryset = Vote.objects.select_related(
+        'voter', 'project_campaign__project', 'project_campaign__campaign', 'category'
+    ).all()
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return VoteCreateSerializer
-        return VoteSerializer
+        return VoteCreateSerializer if self.action == 'create' else VoteSerializer
 
     @extend_schema(
-        summary="Cast a vote (overall or category)",
-        responses={
-            201: VoteSerializer,
-            400: OpenApiResponse(description="Already voted / invalid")
-        }
+        summary="Cast a vote",
+        request=VoteCreateSerializer,
+        responses={201: VoteSerializer, 400: OpenApiResponse(description="Invalid vote")}
     )
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         vote = serializer.save()
         return Response(VoteSerializer(vote).data, status=status.HTTP_201_CREATED)
 
-    @extend_schema(summary="List all votes (admin only)")
-    def list(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return Response({"error": "Admin only."}, status=403)
-        return super().list(request, *args, **kwargs)
-
-    @extend_schema(summary="Get user's votes")
+    @extend_schema(summary="My votes")
     @action(detail=False, methods=['get'])
     def my_votes(self, request):
         votes = Vote.objects.filter(voter=request.user)
         serializer = VoteSerializer(votes, many=True)
         return Response(serializer.data)
 
-    @extend_schema(summary="Vote leaderboard")
+    @extend_schema(summary="Leaderboard (all campaigns)")
     @action(detail=False, methods=['get'], url_path='leaderboard')
     def leaderboard(self, request):
-        # Top projects by total votes
-        top_projects = (
-            Vote.objects.values('project__ref', 'project__title')
-            .annotate(total=Count('id'))
-            .order_by('-total')[:10]
+        campaign_ref = request.query_params.get('campaign_ref')
+        category_id = request.query_params.get('category_id')
+
+        base_qs = Vote.objects.values(
+            'project_campaign__project__ref',
+            'project_campaign__project__name',
+            'project_campaign__campaign__name'
         )
-        return Response(top_projects)
+
+        if campaign_ref:
+            base_qs = base_qs.filter(project_campaign__campaign__ref=campaign_ref)
+
+        # Count votes
+        leaderboard = base_qs.annotate(
+            overall_votes=Count('id', filter=Q(is_overall=True)),
+            category_votes=Count('id', filter=Q(is_overall=False)),
+            total_votes=Count('id')
+        ).annotate(
+            rank=Case(
+                When(category_id__isnull=False, then=Count('id', filter=Q(category_id=category_id))),
+                default=Count('id'),
+                output_field=IntegerField()
+            )
+        ).order_by('-rank')[:20]
+
+        return Response(list(leaderboard))

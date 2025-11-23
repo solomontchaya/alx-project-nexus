@@ -8,7 +8,8 @@ from projects.models import Project
 class Vote(models.Model):
     ref = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='votes')
+    category = models.ForeignKey('categories.Category', on_delete=models.CASCADE)
+    project_campaign = models.ForeignKey('projects.ProjectCampaign', on_delete=models.CASCADE, related_name='votes')
 
     is_overall = models.BooleanField(default=False)
 
@@ -16,7 +17,14 @@ class Vote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('voter', 'project')
+        unique_together = ('voter', 'project_campaign')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['voter', 'project_campaign'],
+                condition=models.Q(is_overall=True),
+                name='one_overall_vote_per_entry'
+            )
+        ]
         verbose_name = "Vote"
         verbose_name_plural = "Votes"
 
