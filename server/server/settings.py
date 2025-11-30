@@ -51,6 +51,8 @@ ALLOWED_HOSTS = [
     ".onrender.com"
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Authentication Configuration
 AUTH_USER_MODEL = 'users.User'
 
