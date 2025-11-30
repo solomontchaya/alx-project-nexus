@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/auth/', include('auth0.urls')),
     path('api/', include('votes.urls')),
     path('api/', include('users.urls')),
+    path('api/', include('teams.urls')),
     path('api/', include('projects.urls')),
     path('api/', include('campaigns.urls')),
     path('api/', include('categories.urls')),
