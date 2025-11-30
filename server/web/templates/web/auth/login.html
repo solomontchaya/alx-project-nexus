@@ -1,0 +1,60 @@
+{% extends 'web/shared/base.html' %}
+{% block content %}
+    {% load static %}
+    {% include 'web/shared/navbar.html' %}
+    <div class="container-fluid" style='height: 150vh; background-color: lightgray;'>
+        <div class="row justify-content-center" style="padding: 50px;">
+            <div class="col-md-4 col-lg-4 card" style="border-radius: 20px;">
+                <!-- Header with Logo and Title -->
+                <div class="card-header py-4 text-center">
+                    <img src="{% static 'files/assets/img/logo/logo-3.png' %}" alt="Logo" class="mb-2" style="height: 60px;">
+                    <h3 class="mb-3 fw-bold">AppLaud</h3>
+                    <h5 class="text-muted">Sign into your account</h5>
+                </div>
+                
+                <!-- Login Form -->
+                <div class="card-body p-4">
+                    <!-- Display Messages -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show text-center">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form class="mt-0" method="post">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="email" class="form-label fw-semibold">Email</label>
+                                <input type="email" name="email" class="form-control" 
+                                       placeholder="Enter email address" 
+                                       value="{{ form_data.email|default:'' }}" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="password" class="form-label fw-semibold">Password</label>
+                                <input type="password" name="password" class="form-control" 
+                                       placeholder="Enter your password" required>
+                                <small class="form-text text-muted">
+                                    Password must be at least 8 characters long.
+                                </small>
+                            </div>
+                        </div>
+                        
+
+                        <div class="align-items-center mb-4">
+                            <a href="{% url 'signup' %}" class="text-decoration-none text-success small text-primary float-right mb-3">
+                                Don't have an account?
+                            </a>
+                        </div>
+
+                        <button type="submit" class="btn btn-outline-primary w-100 py-2 fw-bold text-uppercase">
+                            Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

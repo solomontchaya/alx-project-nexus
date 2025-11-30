@@ -33,6 +33,7 @@ SECRET_KEY = 'django-insecure-99*a%qx_q#)3bziun=)++q+0vs^er9z)=v(oh_mvk&uows(@at
 DEBUG = True
 
 FRONTEND_URL = 'https://your-frontend.vercel.app'
+BACKEND_URL = 'http://127.0.0.1:8000/api/'
 
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -44,7 +45,7 @@ EMAIL_HOST_PASSWORD = 'your-app-password'  # Use App Password
 DEFAULT_FROM_EMAIL = 'Student Voting <noreply@yourdomain.com>'
 
 ALLOWED_HOSTS = [
-    "127.0.0.1"
+    "127.0.0.1",
     "localhost", 
     ".vercel.app",
     ".pythonanywhere.com",

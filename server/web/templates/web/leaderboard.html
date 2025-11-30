@@ -1,0 +1,74 @@
+{% extends 'web/shared/base.html' %}
+{% block content %}
+  {% load static %}
+  {% include 'web/shared/navbar.html' %}
+    <!-- Main content -->
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2 mt-2">
+                    <div class="col-9">
+                        <h4 class="m-0"><b>Leaderboard</b></h4>
+                    </div><!-- /.col -->
+                    <div class="col-3">
+                    <select name="campaign" class="form-control form-control-sm">
+                        <option value="all">All Campaigns</option>
+                    </select>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">Live Leaderboard</div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <th>Rank</th>
+                                        <th>Project</th>
+                                        <th>Team</th>
+                                        <th>Votes</th>
+                                        <th>Action</th>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Other insights in pie charts etc-->
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Total Votes</div>
+                                <div class="card-body">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Active Campaigns</div>
+                                <div class="card-body">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">All Campaigns</div>
+                                <div class="card-body">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
