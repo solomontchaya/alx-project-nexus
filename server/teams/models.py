@@ -6,6 +6,7 @@ from users.models import User
 class Team(models.Model):
     ref = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     name = models.CharField(max_length=100, unique=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
 
     updated_at = models.DateTimeField(auto_now=True)

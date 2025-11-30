@@ -44,9 +44,9 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav gap-5">
+                <ul class="navbar-nav gap-6">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'leaderboard' %}active{% endif %}" href="">Leaderboard</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'leaderboard' %}active{% endif %}" href="{% url 'home' %}">Leaderboard</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
@@ -62,10 +62,10 @@
 
                     <div class="dropdown-menu" aria-labelledby="votesDropdown">
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
-                        href="">
+                        href="{% url 'campaigns' %}">
                             All Campaigns
                         </a>
-
+                        <!--
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
                         href="">
                             My Campaigns
@@ -75,6 +75,7 @@
                         href="">
                             Create a Campaign
                         </a>
+                        -->
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -91,10 +92,10 @@
 
                     <div class="dropdown-menu" aria-labelledby="votesDropdown">
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
-                        href="">
+                        href="{% url 'projects' %}">
                             All Projects
                         </a>
-
+                        <!--
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
                         href="">
                             My Projects
@@ -104,6 +105,7 @@
                         href="">
                             Submit a Project
                         </a>
+                        -->
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -120,22 +122,23 @@
 
                     <div class="dropdown-menu" aria-labelledby="votesDropdown">
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
-                        href="">
+                        href="{% url 'teams' %}">
                             All Teams
                         </a>
-
+                        <!--
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
                         href="">
                             My Teams
                         </a>
-
+                        
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
                         href="">
                             Create a Team
                         </a>
+                        -->
                     </div>
                 </li>
-
+                <!--
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
                         href="#" 
@@ -155,14 +158,46 @@
                         </a>
 
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
-                        href="">
+                        href="{% url 'votes' %}">
                             All Votes
                         </a>
-
                         <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
                         href="">
                             My Votes
                         </a>
+                    </div>
+                </li>
+                -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'vote all_votes my_votes' %}active{% endif %}" 
+                        href="#" 
+                        id="votesDropdown" 
+                        role="button" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false"
+                    >
+                        Users
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="votesDropdown">
+                        <!--
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'vote' %}active{% endif %}" 
+                        href="">
+                            Vote
+                        </a>
+                        -->
+
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'all_votes' %}active{% endif %}" 
+                        href="{% url 'users' %}">
+                            All Users
+                        </a>
+                        <!--
+                        <a class="dropdown-item {% if request.resolver_match.url_name == 'my_votes' %}active{% endif %}" 
+                        href="">
+                            My Votes
+                        </a>
+                        -->
                     </div>
                 </li>
 

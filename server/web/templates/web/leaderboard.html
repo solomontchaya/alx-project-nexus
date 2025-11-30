@@ -25,16 +25,74 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">Live Leaderboard</div>
+                            <div class="card-header"><i class="fas fa-clock mx-2"></i>Live Leaderboard</div>
                             <div class="card-body">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <th>Rank</th>
-                                        <th>Project</th>
-                                        <th>Team</th>
-                                        <th>Votes</th>
-                                        <th>Action</th>
+                               <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Project</th>
+                                            <th>Team</th>
+                                            <th>Votes</th>
+                                            <th>Action</th>
+                                        </tr>
                                     </thead>
+                                    <tbody>
+                            {% for entry in leaderboard %}
+                            <tr class="{% if forloop.counter0 == 0 %}table-warning{% elif forloop.counter0 == 1 %}table-secondary{% elif forloop.counter0 == 2 %}table-bronze{% endif %}">
+                                <td class="text-center fw-bold">
+                                    {% if forloop.counter == 1 %}
+                                        <span class="badge bg-warning text-dark fs-5">1st Place</span>
+                                    {% elif forloop.counter == 2 %}
+                                        <span class="badge bg-secondary fs-5">2nd Place</span>
+                                    {% elif forloop.counter == 3 %}
+                                        <span class="badge bg-danger text-white fs-5">3rd Place</span>
+                                    {% else %}
+                                        #{{ forloop.counter }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <strong>{{ entry.project_name }}</strong><br>
+                                    <small class="text-muted">{{ entry.project_summary|truncatechars:80 }}</small>
+                                    {% if entry.category_name %}
+                                        <span class="badge bg-info ms-2">{{ entry.category_name }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="align-middle">
+                                    <span class="fw-semibold">{{ entry.team_name }}</span>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <h4 class="mb-0 text-primary">{{ entry.vote_count }}</h4>
+                                    <small class="text-muted">{{ entry.overall_votes }} overall</small>
+                                </td>
+                                <td class="text-center align-middle">
+                                    {% if user.is_authenticated %}
+                                        <form method="post" action="{% url 'vote_project' %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="project_ref" value="{{ entry.project_ref }}">
+                                            <input type="hidden" name="campaign_ref" value="{{ selected_campaign }}">
+                                            <button type="submit" class="btn btn-sm {% if entry.has_voted %}btn-secondary disabled{% else %}btn-success{% endif %}"
+                                                {% if entry.has_voted %}disabled{% endif %}>
+                                                {% if entry.has_voted %}Voted{% else %}Vote Now{% endif %}
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <a href="{% url 'signin' %}" class="btn btn-sm btn-outline-primary">
+                                            Login to Vote
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
+                                    <h5>No votes yet</h5>
+                                    <p>Be the first to vote!</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
                                 </table>
                             </div>
                         </div>
@@ -43,27 +101,189 @@
                     <div class="col-md-4">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Total Votes</div>
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-heartbeat mx-2"></i>Voting Activity
+                                    </h5>
+                                </div>
                                 <div class="card-body">
+                                    <div class="row text-center">
+                                        <!-- Total Votes -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="p-3 bg-light rounded">
+                                                <i class="fas fa-heart text-danger mb-2"></i>
+                                                <h4 class="fw-bold text-dark">{{ total_votes|default:0 }}</h4>
+                                                <small class="text-muted">Total Votes</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Today's Votes -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="p-3 bg-light rounded">
+                                                <i class="fas fa-bolt text-warning mb-2"></i>
+                                                <h4 class="fw-bold text-dark">{{ today_votes|default:0 }}</h4>
+                                                <small class="text-muted">Today</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Active Voters -->
+                                        <div class="col-md-4 mb-3">
+                                            <div class="p-3 bg-light rounded">
+                                                <i class="fas fa-users text-success mb-2"></i>
+                                                <h4 class="fw-bold text-dark">{{ active_voters|default:0 }}</h4>
+                                                <small class="text-muted">Voters</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
+                                    <!-- Vote Distribution -->
+                                    <div class="mt-3">
+                                        <h6 class="fw-semibold mb-3">Vote Distribution</h6>
+                                        {% for project in top_voted_projects|slice:":3" %}
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <small class="text-truncate" style="max-width: 60%;">{{ project.project_name }}</small>
+                                            <div class="d-flex align-items-center">
+                                                <small class="text-muted me-2">{{ project.vote_count }} votes</small>
+                                                <div class="progress" style="width: 80px; height: 6px;">
+                                                    <div class="progress-bar bg-primary" 
+                                                        style="width: {{ project.vote_percentage }}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Active Campaigns</div>
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-tags mx-2"></i>Active Categories
+                                    </h5>
+                                </div>
                                 <div class="card-body">
-                                    
+                                    {% if categories %}
+                                        <div class="row">
+                                            {% for category in categories %}
+                                            <div class="col-md-4 mb-3">
+                                                <div class="card category-card h-100 border-0 shadow-sm">
+                                                    <div class="card-body text-center">
+                                                        <div class="mb-3">
+                                                            <i class="fas fa-folder fa-2x text-primary"></i>
+                                                        </div>
+                                                        <h6 class="card-title fw-bold">{{ category.name }}</h6>
+                                                        {% if category.description %}
+                                                            <p class="card-text text-muted small">{{ category.description|truncatewords:10 }}</p>
+                                                        {% endif %}
+                                                        {% if category.project_count %}
+                                                            <span class="badge bg-info">{{ category.project_count }} projects</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="text-center py-4">
+                                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                            <h6 class="text-muted">No Categories Available</h6>
+                                            <p class="text-muted small">No active categories at the moment.</p>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">All Campaigns</div>
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-flag mx-2"></i>Active Campaigns
+                                    </h5>
+                                </div>
                                 <div class="card-body">
-                                    
+                                    {% if campaigns %}
+                                        <div class="row">
+                                            {% for campaign in campaigns %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card campaign-card h-100">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                                            <h6 class="card-title fw-bold text-dark">{{ campaign.name }}</h6>
+                                                            <span class="badge {% if campaign.status == 'active' %}bg-success{% else %}bg-warning{% endif %}">
+                                                                {{ campaign.status|title }}
+                                                            </span>
+                                                        </div>
+                                                        
+                                                        {% if campaign.description %}
+                                                            <p class="card-text text-muted small mb-2">{{ campaign.description|truncatewords:15 }}</p>
+                                                        {% endif %}
+                                                        
+                                                        <div class="campaign-meta">
+                                                            {% if campaign.start_date %}
+                                                                <small class="text-muted d-block">
+                                                                    <i class="fas fa-calendar-start me-1"></i>
+                                                                    Starts: {{ campaign.start_date|date:"M d, Y" }}
+                                                                </small>
+                                                            {% endif %}
+                                                            
+                                                            {% if campaign.end_date %}
+                                                                <small class="text-muted d-block">
+                                                                    <i class="fas fa-calendar-check me-1"></i>
+                                                                    Ends: {{ campaign.end_date|date:"M d, Y" }}
+                                                                </small>
+                                                            {% endif %}
+                                                            
+                                                            {% if campaign.category_name %}
+                                                                <small class="text-muted d-block">
+                                                                    <i class="fas fa-tag me-1"></i>
+                                                                    Category: {{ campaign.category_name }}
+                                                                </small>
+                                                            {% endif %}
+                                                            
+                                                            {% if campaign.submission_count %}
+                                                                <small class="text-muted d-block">
+                                                                    <i class="fas fa-project-diagram me-1"></i>
+                                                                    {{ campaign.submission_count }} submissions
+                                                                </small>
+                                                            {% endif %}
+                                                        </div>
+                                                        
+                                                        <div class="mt-3">
+                                                            {% if request.session.is_authenticated %}
+                                                                <a href="{% url 'submit_to_campaign' campaign.id %}" class="btn btn-sm btn-outline-primary">
+                                                                    <i class="fas fa-paper-plane me-1"></i>Submit Project
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{% url 'signin' %}" class="btn btn-sm btn-outline-secondary">
+                                                                    <i class="fas fa-sign-in-alt me-1"></i>Login to Submit
+                                                                </a>
+                                                            {% endif %}
+                                                            
+                                                            <a href="{% url 'leaderboard' %}?campaign={{ campaign.id }}" class="btn btn-sm btn-outline-info ms-1">
+                                                                <i class="fas fa-trophy me-1"></i>View Leaderboard
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="text-center py-4">
+                                            <i class="fas fa-flag fa-3x text-muted mb-3"></i>
+                                            <h6 class="text-muted">No Active Campaigns</h6>
+                                            <p class="text-muted small">There are no active campaigns at the moment.</p>
+                                            {% if request.user.is_staff %}
+                                                <a href="{% url 'admin:index' %}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-plus me-1"></i>Create Campaign
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

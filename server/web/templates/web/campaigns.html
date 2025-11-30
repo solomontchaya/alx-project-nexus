@@ -1,0 +1,82 @@
+{% extends 'web/shared/base.html' %}
+{% block content %}
+  {% load static %}
+  {% include 'web/shared/navbar.html' %}
+    <!-- Main content -->
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2 mt-2">
+                    <div class="col-9">
+                        <h4 class="m-0"><b>Campaigns</b></h4>
+                    </div><!-- /.col -->
+                    <div class="col-3">
+                        <div class="input-group input-group-sm">
+                            <select name="campaign" class="form-control form-control-sm mx-2">
+                                <option value="me">My Campaigns</option>
+                                <option value="all">All Campaigns</option>
+                            </select>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#addModal">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <!--Active Campaigns-->
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-clock mx-2"></i>Active Campaigns</div>
+                            <div class="card-body">
+                               <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Starts</th>
+                                            <th>Ends On</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <!--Total Campaigns-->
+                        <!--Expired Campaigns-->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title font-weight-bold">Create Campaign</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm" method="POST">
+                        {% csrf_token %}
+                        <!--Fields-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
